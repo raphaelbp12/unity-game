@@ -4,25 +4,43 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float movSpeed = 5;
+    public float movSpeed = 6f;
+
+    Vector3 movement;
+    Rigidbody playerRigidbody;
+
     // Start is called before the first frame update
     void Start()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    void Awake()
     {
-        Move();
+        // Set up references.
+        playerRigidbody = GetComponent<Rigidbody>();
     }
 
-    public void Move()
+    // Update is called once per frame
+    void FixedUpdate()
     {
+        // Store the input axes.
+        float h = Input.GetAxisRaw("Horizontal");
+        float v = Input.GetAxisRaw("Vertical");
 
-        Vector3 Movement = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        // Move the player around the scene.
+        Move(h, v);
+    }
 
-        transform.position += Movement * movSpeed * Time.deltaTime;
+    void Move(float h, float v)
+    {
+        // Set the movement vector based on the axis input.
+        movement.Set(h, 0f, v);
 
+        // Normalise the movement vector and make it proportional to the speed per second.
+        movement = movement.normalized * movSpeed * Time.deltaTime;
+
+        // Move the player to it's current position plus the movement.
+        playerRigidbody.MovePosition(transform.position + movement);
     }
 }
