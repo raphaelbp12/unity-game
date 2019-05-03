@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class EnemyHealth : MonoBehaviour
 {
-    public int startingHealth = 100;            // The amount of health the enemy starts the game with.
-    public int currentHealth;                   // The current health the enemy has.
+    public float startingHealth = 100;            // The amount of health the enemy starts the game with.
+    public float currentHealth;                   // The current health the enemy has.
     public float sinkSpeed = 2.5f;              // The speed at which the enemy sinks through the floor when dead.
     public int scoreValue = 10;                 // The amount added to the player's score when the enemy dies.
+    public Image healthBar;
+    public Canvas healthCanvas;
     //public AudioClip deathClip;                 // The sound to play when the enemy dies.
 
 
@@ -40,6 +43,8 @@ public class EnemyHealth : MonoBehaviour
             // ... move the enemy down by the sinkSpeed per second.
             transform.Translate(-Vector3.up * sinkSpeed * Time.deltaTime);
         }
+
+        healthCanvas.transform.rotation = Quaternion.identity;
     }
 
 
@@ -55,6 +60,8 @@ public class EnemyHealth : MonoBehaviour
 
         // Reduce the current health by the amount of damage sustained.
         currentHealth -= amount;
+
+        healthBar.fillAmount = currentHealth / startingHealth;
 
         // Set the position of the particle system to where the hit was sustained.
         //hitParticles.transform.position = hitPoint;
