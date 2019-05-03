@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
@@ -18,18 +19,20 @@ public class EnemyHealth : MonoBehaviour
     //Animator anim;                              // Reference to the animator.
     //AudioSource enemyAudio;                     // Reference to the audio source.
     //ParticleSystem hitParticles;                // Reference to the particle system that plays when the enemy is damaged.
-    CapsuleCollider capsuleCollider;            // Reference to the capsule collider.
+    BoxCollider boxCollider;            // Reference to the capsule collider.
     bool isDead;                                // Whether the enemy is dead.
     bool isSinking;                             // Whether the enemy has started sinking through the floor.
+    List<PlayerAttackController> playerAttackControllers;
 
 
     void Awake()
     {
+        playerAttackControllers = new List<PlayerAttackController>();
         // Setting up the references.
         //anim = GetComponent<Animator>();
         //enemyAudio = GetComponent<AudioSource>();
         //hitParticles = GetComponentInChildren<ParticleSystem>();
-        capsuleCollider = GetComponent<CapsuleCollider>();
+        boxCollider = GetComponent<BoxCollider>();
 
         // Setting the current health when the enemy first spawns.
         currentHealth = startingHealth;
@@ -48,8 +51,15 @@ public class EnemyHealth : MonoBehaviour
     }
 
 
-    public void TakeDamage(int amount, Vector3 hitPoint)
+    public void TakeDamage(int amount, PlayerAttackController playerAttackController)
     {
+        if (playerAttackControllers.Any(x => x == playerAttackController))
+            return;
+        else
+        {
+            playerAttackControllers.Add(playerAttackController);
+        }
+        Debug.Log("TakeDamage" + amount);
         // If the enemy is dead...
         if (isDead)
             // ... no need to take damage so exit the function.
@@ -84,7 +94,7 @@ public class EnemyHealth : MonoBehaviour
         isDead = true;
 
         // Turn the collider into a trigger so shots can pass through it.
-        capsuleCollider.isTrigger = true;
+        boxCollider.isTrigger = true;
 
         // Tell the animator that the enemy is dead.
         //anim.SetTrigger("Dead");
@@ -98,6 +108,7 @@ public class EnemyHealth : MonoBehaviour
 
     public void StartSinking()
     {
+        Debug.Log("start sinking");
         // Find and disable the Nav Mesh Agent.
         GetComponent<NavMeshAgent>().enabled = false;
 
