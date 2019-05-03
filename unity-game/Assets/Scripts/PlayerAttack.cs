@@ -19,7 +19,7 @@ public class PlayerAttack : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (fireCooldown <= 0f)
+        if (fireCooldown <= 0f && Input.GetButton("Fire1"))
         {
             Shoot();
             fireCooldown = 1f / fireRate;

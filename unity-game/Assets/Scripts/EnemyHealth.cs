@@ -59,7 +59,7 @@ public class EnemyHealth : MonoBehaviour
         {
             playerAttackControllers.Add(playerAttackController);
         }
-        Debug.Log("TakeDamage" + amount);
+        //Debug.Log("TakeDamage" + amount);
         // If the enemy is dead...
         if (isDead)
             // ... no need to take damage so exit the function.

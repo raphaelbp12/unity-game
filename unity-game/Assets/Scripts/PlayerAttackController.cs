@@ -8,7 +8,7 @@ public class PlayerAttackController : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Enemy"))
         {
-            Debug.Log("attack collide enemy");
+            //Debug.Log("attack collide enemy");
             EnemyHealth enemyHealth = other.gameObject.GetComponent<EnemyHealth>();
             enemyHealth.TakeDamage(40, this);
         }
